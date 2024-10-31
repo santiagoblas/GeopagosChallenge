@@ -9,7 +9,7 @@ use Tennis\TennisPlayer as TennisTennisPlayer;
 class TennisPlayerTest extends TestCase {
 
     public function test_save_player() {
-        $player = new TennisTennisPlayer("Lara", 88);
+        $player = new TennisTennisPlayer("Lara", 88, 50, 64, 0.4);
 
         $model = new TennisPlayer($player);
 

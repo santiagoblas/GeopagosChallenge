@@ -1,6 +1,5 @@
 <?php
 namespace Data;
-require 'vendor/autoload.php';
 
 use LessQL\Row;
 use Tennis\TennisPlayer as TennisTennisPlayer;
