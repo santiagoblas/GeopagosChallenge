@@ -55,11 +55,17 @@ class TennisTournament {
             $player_a = $players_to_compete[$i];
             $player_b = $players_to_compete[$i + 1];
 
-            $match = new TennisMatch($player_a, $player_b);
+            $match = $this->get_tennis_match($player_a, $player_b);
 
             $round_winners[] = $match->dispute();
         }
 
         return $round_winners;
+    }
+
+    private function get_tennis_match(TennisPlayer $player_a, TennisPlayer $player_b) : TennisMatch {
+        $match = new TennisMatch($player_a, $player_b);
+
+        return $match;
     }
 }

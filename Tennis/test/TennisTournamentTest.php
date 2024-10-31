@@ -2,6 +2,8 @@
 namespace Test;
 
 use PHPUnit\Framework\TestCase;
+use Tennis\FemaleTennisTournament;
+use Tennis\MaleTennisTournament;
 use Tennis\TennisPlayer;
 use Tennis\TennisTournament;
 
@@ -51,16 +53,46 @@ class TennisTournamentTest extends TestCase {
         $this->assertTrue($tournament->can_dispute());
     }
 
-    public function test_dispute() {
+    public function test_tournament_dispute() {
         $players = array();
-        $players[] = new TennisPlayer("David", 75);
-        $players[] = new TennisPlayer("Simón", 80);
-        $players[] = new TennisPlayer("Brenda", 58);
+        $players[] = new TennisPlayer("David", 22);
+        $players[] = new TennisPlayer("Simón", 22);
+        $players[] = new TennisPlayer("Brenda", 22);
 
-        $lara = new TennisPlayer("Lara", 88);
+        $lara = new TennisPlayer("Lara", 100);
         $players[] = $lara;
 
         $tournament = new TennisTournament($players);
+
+        $this->assertEquals($lara, $tournament->dispute(), "The best didn't won.\n");
+    }
+
+    public function test_male_tournament_dispute() {
+        $players = array();
+        $players[] = new TennisPlayer("David", 22, 50, 34, 0.1);
+        $players[] = new TennisPlayer("Simón", 32, 45, 55, 0.1);
+        $players[] = new TennisPlayer("Brenda", 28, 56, 43, 0.1);
+
+        $lara = new TennisPlayer("Lara", 99, 99, 88, 1);
+        $players[] = $lara;
+
+        $tournament = new MaleTennisTournament($players);
+
+        $this->assertEquals($lara, $tournament->dispute(), "The best didn't won.\n");
+    }
+
+    public function test_female_tournament_dispute() {
+        $players = array();
+        $players[] = new TennisPlayer("David", 22, 99, 99, 0.8);
+        $players[] = new TennisPlayer("Simón", 32, 99, 99, 0.8);
+        $players[] = new TennisPlayer("Brenda", 28, 99, 99, 0.9);
+
+        $lara = new TennisPlayer("Lara", 88, 2, 8, 0.1);
+        $players[] = $lara;
+
+        $tournament = new FemaleTennisTournament($players);
+
+
 
         $this->assertEquals($lara, $tournament->dispute(), "The best didn't won.\n");
     }

@@ -3,8 +3,8 @@
 namespace Data;
 
 class DatabaseConnection {
-    public $pdo = null;
-    public $db = null;
+    protected $pdo = null;
+    protected $db = null;
 
     public function get_connection() {
         return null;
