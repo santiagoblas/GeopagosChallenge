@@ -3,18 +3,30 @@
 namespace Tennis;
 
 class TennisTournament {
+    private int $_id;
+    private string $name;
     private array $players;
 
-    public function __construct(array $players = [])
+    public function __construct(string $name, array $players = [])
     {
-        $players = array_filter($players,function($player) {
+        $this->_id = 0;
+        $this->name = $name;
+
+        $players = array_filter($players, function($player) {
             if ($player instanceof TennisPlayer) {
                 return true;
             }
             return false;
         });
-
         $this->players = $players;
+    }
+
+    public function get_id() : string {
+        return $this->_id;
+    }
+
+    public function get_name() : string {
+        return $this->name;
     }
 
     public function get_players() : array {

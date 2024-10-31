@@ -1,24 +1,39 @@
 <?php
 namespace Data;
 
+use LessQL\Database;
 use LessQL\Row;
 use Tennis\TennisPlayer as TennisTennisPlayer;
 
 class TennisPlayer implements Model {
+    private Database $db;
     private TennisTennisPlayer $player;
 
-    public function __construct(TennisTennisPlayer $player = null)
+    public function __construct(DatabaseConnection $connection, TennisTennisPlayer $player = null)
     {
+        $this->db = $connection->get_connection();
+
+        if ($player == null) {
+            return;
+        }
+
         $this->player = $player;
     }
 
     public function find(int $id) : TennisTennisPlayer {
-        $connection = new MysqlConnection();
-        $db = $connection->get_connection();
+        $result = $this->db->users()->where('id', $id)->fetch();
 
-        $result = $db->users()->where('id', $id)->fetch();
+        $tennis_player = new TennisTennisPlayer(
+            $result['name'],
+            $result['level'],
+            $result['strength'],
+            $result['speed'],
+            $result['reaction_time']
+        );
 
-        return $result;
+        $this->player = $tennis_player;
+
+        return $tennis_player;
     }
 
     public function save() : Row {
@@ -26,24 +41,39 @@ class TennisPlayer implements Model {
             return null;
         }
 
-        $connection = new MysqlConnection();
-        $db = $connection->get_connection();
-
-        $tennis_player = $db->createRow('tennis_players', [
+        $tennis_player = [
             'name' => $this->player->get_name(), 
             'level' => $this->player->get_level(),
-            'strength' => 8,
-            'speed' => 8,
-            'reaction_time' => 0.5
-        ]);
+            'strength' => $this->player->get_strength(),
+            'speed' => $this->player->get_speed(),
+            'reaction_time' => $this->player->get_reaction_time()
+        ];
+
+        if ($this->player->get_id() != 0) {
+            $tennis_player['id'] = $this->player->get_id();
+        }
+
+        $tennis_player = $this->db->createRow('tennis_players', $tennis_player);
 
         $tennis_player->save();
 
         return $tennis_player;
     }
 
-    public function delete() {
+    public function delete(int $id) : bool {
+        $tennis_player = $this->db->tennis_players()->where('id', $id);
 
+        if (is_null($tennis_player)) {
+            return false;
+        }
+        
+        $rows = $tennis_player->delete()->rowCount();
+
+        if ($rows > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     public function validate() : bool {
