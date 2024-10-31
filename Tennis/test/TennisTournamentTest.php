@@ -19,7 +19,7 @@ class TennisTournamentTest extends TestCase {
 
         $players_with_intruder = array_merge($players, ["not TennisPlayer"]);
 
-        $tournament = new TennisTournament($players_with_intruder);
+        $tournament = new TennisTournament("test tournament", $players_with_intruder);
 
         $this->assertEquals($players, $tournament->get_players(), "Should be TennisPlayer validation failed.\n");
     }
@@ -31,7 +31,7 @@ class TennisTournamentTest extends TestCase {
         $players[] = new TennisPlayer("Brenda", 58);
         $players[] = new TennisPlayer("Lara", 88);
 
-        $tournament = new TennisTournament($players);
+        $tournament = new TennisTournament("test tournament", $players);
 
         $new_player = new TennisPlayer("Zamantha", 45);
 
@@ -48,7 +48,7 @@ class TennisTournamentTest extends TestCase {
         $players[] = new TennisPlayer("Brenda", 58);
         $players[] = new TennisPlayer("Lara", 88);
 
-        $tournament = new TennisTournament($players);
+        $tournament = new TennisTournament("test tournament", $players);
 
         $this->assertTrue($tournament->can_dispute());
     }
@@ -62,7 +62,7 @@ class TennisTournamentTest extends TestCase {
         $lara = new TennisPlayer("Lara", 100);
         $players[] = $lara;
 
-        $tournament = new TennisTournament($players);
+        $tournament = new TennisTournament("test tournament", $players);
 
         $this->assertEquals($lara, $tournament->dispute(), "The best didn't won.\n");
     }
@@ -76,7 +76,7 @@ class TennisTournamentTest extends TestCase {
         $lara = new TennisPlayer("Lara", 99, 99, 88, 1);
         $players[] = $lara;
 
-        $tournament = new MaleTennisTournament($players);
+        $tournament = new MaleTennisTournament("test tournament", $players);
 
         $this->assertEquals($lara, $tournament->dispute(), "The best didn't won.\n");
     }
@@ -90,7 +90,7 @@ class TennisTournamentTest extends TestCase {
         $lara = new TennisPlayer("Lara", 88, 2, 8, 0.1);
         $players[] = $lara;
 
-        $tournament = new FemaleTennisTournament($players);
+        $tournament = new FemaleTennisTournament("test tournament", $players);
 
 
 

@@ -11,11 +11,26 @@ class TennisPlayerTest extends TestCase {
     public function test_save_player() {
         $player = new TennisTennisPlayer("Lara", 88, 50, 64, 0.4);
 
-        $model = new TennisPlayer($player);
+        $model = new TennisPlayer(new MysqlConnection(), $player);
 
         $tennis_player = $model->save();
 
-        $this->assertFalse(is_null($tennis_player), "Tennis player not saved");
+        $id = $tennis_player->id;
+
+        $this->assertFalse(is_null($id), "Tennis player not saved");
+
+        return $id;
+    }
+
+    /**
+     * @depends test_save_player
+     * */
+    public function test_delete_player($id) {
+        $tennis_player = new TennisPlayer(new MysqlConnection());
+
+        $deleted = $tennis_player->delete($id);
+
+        $this->assertTrue($deleted, "Delete affected 0 rows");
     }
 
 }
