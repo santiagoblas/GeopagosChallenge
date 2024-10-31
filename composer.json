@@ -4,12 +4,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Tennis\\": "Tennis/classes/"
+            "Tennis\\": "Tennis/classes/",
+            "Data\\": ["Data/classes/", "Data/models/"]
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "test/"
-        }
+    "require": {
+        "morris/lessql": "^1.0"
     }
 }

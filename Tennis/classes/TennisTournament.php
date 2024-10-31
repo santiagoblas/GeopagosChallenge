@@ -2,8 +2,6 @@
 
 namespace Tennis;
 
-use function PHPUnit\Framework\isInstanceOf;
-
 class TennisTournament {
     private array $players;
 
