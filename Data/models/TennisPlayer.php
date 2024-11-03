@@ -5,13 +5,13 @@ use LessQL\Database;
 use LessQL\Row;
 use Tennis\TennisPlayer as TennisTennisPlayer;
 
-class TennisPlayer implements Model {
-    private Database $db;
-    private TennisTennisPlayer $player;
+class TennisPlayer extends Model {
+    public TennisTennisPlayer $player;
 
     public function __construct(DatabaseConnection $connection, TennisTennisPlayer $player = null)
     {
         $this->db = $connection->get_connection();
+        $this->table_name = 'tennis_players';
 
         if ($player == null) {
             return;
@@ -21,7 +21,12 @@ class TennisPlayer implements Model {
     }
 
     public function find(int $id) : TennisTennisPlayer {
-        $result = $this->db->users()->where('id', $id)->fetch();
+        $table_name = $this->table_name;
+        $result = $this->db->$table_name()->where('id', $id)->fetch();
+        
+        if (is_null($result)) {
+            return null;
+        }
 
         $tennis_player = new TennisTennisPlayer(
             $result['name'],
@@ -30,6 +35,8 @@ class TennisPlayer implements Model {
             $result['speed'],
             $result['reaction_time']
         );
+
+        $tennis_player->set_id($id);
 
         $this->player = $tennis_player;
 
@@ -53,27 +60,11 @@ class TennisPlayer implements Model {
             $tennis_player['id'] = $this->player->get_id();
         }
 
-        $tennis_player = $this->db->createRow('tennis_players', $tennis_player);
+        $tennis_player = $this->db->createRow($this->table_name, $tennis_player);
 
         $tennis_player->save();
 
         return $tennis_player;
-    }
-
-    public function delete(int $id) : bool {
-        $tennis_player = $this->db->tennis_players()->where('id', $id);
-
-        if (is_null($tennis_player)) {
-            return false;
-        }
-        
-        $rows = $tennis_player->delete()->rowCount();
-
-        if ($rows > 0) {
-            return true;
-        }
-
-        return false;
     }
 
     public function validate() : bool {
