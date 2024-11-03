@@ -12,7 +12,7 @@ class TennisRegistrationTest extends TestCase {
     public function test_save_tournament() : int {
         $tournament = new TennisTennisTournament("test tournament", []);
 
-        $model = new TennisTournament(new MysqlConnection(), $tournament);
+        $model = new TennisTournament($tournament);
 
         $tennis_tournament = $model->save();
 
@@ -24,7 +24,7 @@ class TennisRegistrationTest extends TestCase {
     }
     
     public function test_save_players() : array {
-        $model = new TennisPlayer(new MysqlConnection());
+        $model = new TennisPlayer();
 
         $players = [];
         $players[] = new TennisTennisPlayer("David", 75,1,1,1);
@@ -56,7 +56,7 @@ class TennisRegistrationTest extends TestCase {
      * @depends test_save_players
      * */
     public function test_register_players(int $tournament_id, array $player_ids) {
-        $model = new TennisRegistration(new MysqlConnection());
+        $model = new TennisRegistration();
 
         $all_saved = true;
         foreach ($player_ids as $player_id) {
@@ -84,7 +84,7 @@ class TennisRegistrationTest extends TestCase {
      * @depends test_register_players
      * */
     public function test_delete_tournament($tournament_id) {
-        $tennis_tournament = new TennisTournament(new MysqlConnection());
+        $tennis_tournament = new TennisTournament();
 
         $deleted = $tennis_tournament->delete($tournament_id);
 
@@ -96,7 +96,7 @@ class TennisRegistrationTest extends TestCase {
      * @depends test_register_players
      * */
     public function test_delete_players($player_ids) {
-        $tennis_player = new TennisPlayer(new MysqlConnection());
+        $tennis_player = new TennisPlayer();
         
         $all_deleted = true;
         foreach ($player_ids as $player_id) {
@@ -114,7 +114,7 @@ class TennisRegistrationTest extends TestCase {
      * @depends test_register_players
      * */
     public function test_delete_registrations($registration_ids) {
-        $tennis_registration = new TennisRegistration(new MysqlConnection());
+        $tennis_registration = new TennisRegistration();
 
         $all_deleted = true;
         foreach ($registration_ids as $registration_id) {

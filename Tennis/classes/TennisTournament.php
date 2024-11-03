@@ -25,6 +25,14 @@ class TennisTournament {
         return $this->_id;
     }
 
+    public function set_id(int $id) {
+        if (is_null($this->_id)) {
+            return;
+        }
+
+        $this->_id = $id;
+    }
+
     public function get_name() : string {
         return $this->name;
     }

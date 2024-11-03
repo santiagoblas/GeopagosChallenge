@@ -20,4 +20,12 @@ class TennisRegistration {
 
         $this->_id = $id;
     }
+
+    public function get_player() {
+        return $this->player;
+    }
+
+    public function get_tournament() {
+        return $this->tournament;
+    }
  }

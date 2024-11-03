@@ -11,7 +11,7 @@ class TennisTournamentTest extends TestCase {
     public function test_save_tournament() {
         $tournament = new TennisTennisTournament("test tournament", []);
 
-        $model = new TennisTournament(new MysqlConnection(), $tournament);
+        $model = new TennisTournament($tournament);
 
         $tennis_tournament = $model->save();
 
@@ -26,7 +26,7 @@ class TennisTournamentTest extends TestCase {
      * @depends test_save_tournament
      * */
     public function test_delete_tournament($id) {
-        $tennis_tournament = new TennisTournament(new MysqlConnection());
+        $tennis_tournament = new TennisTournament();
 
         $deleted = $tennis_tournament->delete($id);
 
