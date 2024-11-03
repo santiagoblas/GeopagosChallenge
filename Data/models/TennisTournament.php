@@ -9,8 +9,9 @@ use Tennis\TennisTournament as TennisTennisTournament;
 class TennisTournament extends Model {
     public TennisTennisTournament $tournament;
 
-    public function __construct(DatabaseConnection $connection, TennisTennisTournament $tournament = null)
+    public function __construct(TennisTennisTournament $tournament = null)
     {
+        $connection = new MysqlConnection();
         $this->db = $connection->get_connection();
         $this->table_name = 'tennis_tournaments';
 
@@ -38,6 +39,12 @@ class TennisTournament extends Model {
         $tennis_tournament->set_id($id);
 
         $this->tournament = $tennis_tournament;
+
+        $data_tennis_registration = new TennisRegistration();
+        $tennis_registrations = $data_tennis_registration->find_all_by_tournament($tennis_tournament);
+        foreach ($tennis_registrations as $tennis_registration) {
+            $tennis_tournament->add_player($tennis_registration->get_player());
+        }
 
         return $tennis_tournament;
     }

@@ -8,8 +8,9 @@ use Tennis\TennisPlayer as TennisTennisPlayer;
 class TennisPlayer extends Model {
     public TennisTennisPlayer $player;
 
-    public function __construct(DatabaseConnection $connection, TennisTennisPlayer $player = null)
+    public function __construct(TennisTennisPlayer $player = null)
     {
+        $connection = new MysqlConnection();
         $this->db = $connection->get_connection();
         $this->table_name = 'tennis_players';
 
