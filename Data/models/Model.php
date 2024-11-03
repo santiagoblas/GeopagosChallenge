@@ -2,11 +2,39 @@
 
 namespace Data;
 
+use LessQL\Database;
 use LessQL\Row;
+use PhpParser\Node\Expr\Cast\Object_;
+use stdClass;
 
-interface Model {
-    public function find(int $id) : object;
-    public function save() : Row;
-    public function delete(int $id);
-    public function validate() : bool;
+class Model {
+    protected Database $db;
+    protected string $table_name;
+    
+    public function find(int $id) : ?object { return new stdClass(); }
+    public function save() : Row { return new Row($this->db, "Generic Model"); }
+
+    public function delete(int $id) : bool {
+        $table_name = $this->table_name;
+
+        $row = $this->db->$table_name()->where('id', $id);
+        
+        if (is_null($row)) {
+            return false;
+        }
+        
+        $rows = $row->delete()->rowCount();
+
+        if ($rows > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function validate() : bool {
+        $valid = true;
+
+        return $valid;
+    }
 }

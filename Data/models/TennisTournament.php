@@ -1,19 +1,18 @@
 <?php
 namespace Data;
 
-use LessQL\Database;
 use LessQL\Row;
 use Tennis\FemaleTennisTournament;
 use Tennis\MaleTennisTournament;
 use Tennis\TennisTournament as TennisTennisTournament;
 
-class TennisTournament implements Model {
-    private Database $db;
-    private TennisTennisTournament $tournament;
+class TennisTournament extends Model {
+    public TennisTennisTournament $tournament;
 
     public function __construct(DatabaseConnection $connection, TennisTennisTournament $tournament = null)
     {
         $this->db = $connection->get_connection();
+        $this->table_name = 'tennis_tournaments';
 
         if ($tournament == null) {
             return;
@@ -22,14 +21,21 @@ class TennisTournament implements Model {
         $this->tournament = $tournament;
     }
 
-    public function find(int $id) : TennisTennisTournament {
-        $result = $this->db->users()->where('id', $id)->fetch();
+    public function find(int $id) : ?TennisTennisTournament {
+        $table_name = $this->table_name;
+        $result = $this->db->$table_name()->where('id', $id)->fetch();
+
+        if (is_null($result)) {
+            return null;
+        }
 
         if ($result['gender'] == "M") {
             $tennis_tournament = new MaleTennisTournament($result['name']);
         } else {
             $tennis_tournament = new FemaleTennisTournament($result['name']);
         }
+
+        $tennis_tournament->set_id($id);
 
         $this->tournament = $tennis_tournament;
 
@@ -43,34 +49,18 @@ class TennisTournament implements Model {
 
         $tennis_tournament = [
             'name' => $this->tournament->get_name(),
-            'gender' => $this->tournament instanceof MaleTennisTournament ? "M" : "F"
+            'gender' => $this->tournament instanceof MaleTennisTournament ? "M" : "F",
         ];
 
         if ($this->tournament->get_id() != 0) {
             $tennis_tournament['id'] = $this->tournament->get_id();
         }
 
-        $tennis_tournament = $this->db->createRow('tennis_tournaments', $tennis_tournament);
+        $tennis_tournament = $this->db->createRow($this->table_name, $tennis_tournament);
 
         $tennis_tournament->save();
 
         return $tennis_tournament;
-    }
-
-    public function delete(int $id) : bool {
-        $tennis_tournament = $this->db->tennis_tournaments()->where('id', $id);
-
-        if (is_null($tennis_tournament)) {
-            return false;
-        }
-        
-        $rows = $tennis_tournament->delete()->rowCount();
-
-        if ($rows > 0) {
-            return true;
-        }
-
-        return false;
     }
 
     public function validate() : bool {
