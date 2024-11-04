@@ -55,6 +55,10 @@ class TennisTournament {
             return "{\"status\": 200, \"winner\": \"" . $winner->get_name() . "\", \"date\": \"" . $tennis_tennis_tournament->get_date() . "\", \"message\": \"This tournament was already disputed\"}"; 
         }
 
+        if (!$tennis_tennis_tournament->can_dispute()) {
+            return "{\"status\": 400, \"message\": \"Can't dispute tournament, players not a power of 2\"}";
+        }
+
         $winner = $tennis_tennis_tournament->dispute();
 
         if (!$winner instanceof TennisTennisPlayer) {
