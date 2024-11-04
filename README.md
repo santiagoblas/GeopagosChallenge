@@ -1,6 +1,7 @@
 # Challenge
 
 Me enfoqué en diseñar 3 capas: Api, Data y Tennis. Cada una compuesta por sus clases y sus test unitarios.
+La instalación de la mayoría de los componentes se realizó con composer.
 
 # DB
 Usé docker para crear la base de datos en mysql con el siguiente comando
@@ -9,7 +10,10 @@ Usé docker para crear la base de datos en mysql con el siguiente comando
 
 en `Data/db/db.sql` se encuentran los scripts con los que creé las tablas.
 
+Para el acceso se utiliza LessQL
+
 # API
+La Api se basa en el microframework limonade.
 Para interactuar con la api podemos usar la collection para postman guardada en `postman/Geopagos.postman_collection.json`.
 Algunos llevan ids que se corresponden con los de la db.
 La request principal se llama FAST TOURNAMENT, recibe un json con players, un name y un gender.
@@ -31,4 +35,7 @@ vendor/bin/phpunit --testdox --display-deprecations Tennis/test/TennisTournament
 Me hubiese gustado completar el testing unitario de la capa de Api, pero solo alcancé a incluir un ejemplo que valida el status
 
 `vendor/bin/phpunit --testdox --display-deprecations Api/test/TennisTournamentTest.php`
+
+
+Muchas Gracias!
 
