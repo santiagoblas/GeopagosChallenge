@@ -32,7 +32,7 @@ vendor/bin/phpunit --testdox --display-deprecations Tennis/test/TennisMatchTest.
 vendor/bin/phpunit --testdox --display-deprecations Tennis/test/TennisTournamentTest.php  
 ```
 
-Me hubiese gustado completar el testing unitario de la capa de Api, pero solo alcancé a incluir un ejemplo que valida el status
+Me hubiese gustado completar el testing unitario de la capa de Api, pero solo alcancé a incluir un ejemplo que valida el status sobre el torneo inicializado a partir de la lista (json)
 
 `vendor/bin/phpunit --testdox --display-deprecations Api/test/TennisTournamentTest.php`
 
