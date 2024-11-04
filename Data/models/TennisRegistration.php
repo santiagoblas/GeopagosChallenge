@@ -8,21 +8,19 @@ use Tennis\TennisRegistration as TennisTennisRegistration;
 use Tennis\TennisTournament as TennisTennisTournament;
 
 class TennisRegistration extends Model {
-    public int $tournament_id;
-    public int $player_id;
+    public TennisTennisRegistration $registration;
 
-    public function __construct(int $tournament_id = null, int $player_id = null)
+    public function __construct(TennisTennisRegistration $registration = null)
     {
         $connection = new MysqlConnection();
         $this->db = $connection->get_connection();
         $this->table_name = 'tennis_players_tennis_tournaments';
 
-        if ($tournament_id == null || $player_id == null) {
+        if ($registration== null) {
             return;
         }
         
-        $this->tournament_id = $tournament_id;
-        $this->player_id = $player_id;
+        $this->registration = $registration;
     }
 
     public function find(int $id) : ?TennisTennisRegistration {
@@ -39,7 +37,9 @@ class TennisRegistration extends Model {
         $tennis_player = $tennis_player->find($result["tennis_player_id"]);
         $tennis_tournament = $tennis_tournament->find($result["tennis_tournament_id"]);
 
-        $tennis_registration = new TennisTennisRegistration($tennis_player, $tennis_tournament);
+        $tennis_registration = new TennisTennisRegistration($tennis_player, $tennis_tournament, $result["win"]);
+
+        $tennis_registration->set_id($id);
 
         return $tennis_registration;
     }
@@ -57,12 +57,13 @@ class TennisRegistration extends Model {
         $tennis_registrations = [];
         foreach ($result as $tennis_registration) {
             $tennis_player = $data_tennis_player->find($tennis_registration["tennis_player_id"]);
-            $tennis_registration = new TennisTennisRegistration($tennis_player, $tournament);
-            $tennis_registrations[] = $tennis_registration;
+            $tennis_tennis_registration = new TennisTennisRegistration($tennis_player, $tournament, $tennis_registration["win"]);
+            $tennis_tennis_registration->set_id($tennis_registration["id"]);
+            $tennis_registrations[] = $tennis_tennis_registration;
         }
 
         return $tennis_registrations;
-    } 
+    }
 
     public function save() : Row {
         if (!$this->validate()) {
@@ -70,8 +71,8 @@ class TennisRegistration extends Model {
         }
 
         $tennis_registration = [
-            'tennis_tournament_id' => $this->tournament_id,
-            'tennis_player_id' => $this->player_id,
+            'tennis_tournament_id' => $this->registration->get_tournament()->get_id(),
+            'tennis_player_id' => $this->registration->get_player()->get_id(),
         ];
 
         $tennis_registration = $this->db->createRow($this->table_name, $tennis_registration);
@@ -79,5 +80,28 @@ class TennisRegistration extends Model {
         $tennis_registration->save();
 
         return $tennis_registration;
+    }
+
+    public function update() : ?Row {
+        if (!$this->validate()) {
+            return null;
+        }
+
+        $tennis_registration = [
+            'tennis_tournament_id' => $this->registration->get_tournament()->get_id(),
+            'tennis_player_id' => $this->registration->get_player()->get_id(),
+            'win' => $this->registration->get_win()
+        ];
+
+        $table_name = $this->table_name;
+        $result = $this->db->$table_name()->where('id', $this->registration->get_id());
+
+        if (is_null($result)) {
+            return null;
+        }
+
+        $result->update($tennis_registration);
+
+        return $result->fetch();
     }
 }
