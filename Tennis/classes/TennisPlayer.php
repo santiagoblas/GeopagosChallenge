@@ -43,7 +43,7 @@ class TennisPlayer {
     }
 
     public function set_id(int $id) {
-        if (is_null($this->_id)) {
+        if ($this->_id != 0) {
             return;
         }
 

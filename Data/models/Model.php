@@ -12,7 +12,8 @@ class Model {
     protected string $table_name;
     
     public function find(int $id) : ?object { return new stdClass(); }
-    public function save() : Row { return new Row($this->db, "Generic Model"); }
+    public function save() : ?Row { return null; }
+    public function update() : ?Row { return null; }
 
     public function delete(int $id) : bool {
         $table_name = $this->table_name;

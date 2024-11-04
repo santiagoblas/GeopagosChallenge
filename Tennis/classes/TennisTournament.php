@@ -2,12 +2,17 @@
 
 namespace Tennis;
 
+use DateTime;
+
 class TennisTournament {
     private int $_id;
     private string $name;
     private array $players;
+    private bool $disputed;
+    private string $date;
+    private TennisPlayer $winner;
 
-    public function __construct(string $name, array $players = [])
+    public function __construct(string $name, array $players = [], bool $disputed = false, string $date = null, TennisPlayer $winner = null)
     {
         $this->_id = 0;
         $this->name = $name;
@@ -19,30 +24,16 @@ class TennisTournament {
             return false;
         });
         $this->players = $players;
-    }
 
-    public function get_id() : string {
-        return $this->_id;
-    }
+        $this->disputed = $disputed;
 
-    public function set_id(int $id) {
-        if (is_null($this->_id)) {
-            return;
+        if ($date != null) {
+            $this->date = $date;
         }
 
-        $this->_id = $id;
-    }
-
-    public function get_name() : string {
-        return $this->name;
-    }
-
-    public function get_players() : array {
-        return $this->players;
-    }
-
-    public function add_player(TennisPlayer $player) {
-        $this->players[] = $player;
+        if ($winner != null) {
+            $this->winner = $winner;
+        }
     }
 
     public function dispute($players_to_compete = []) : TennisPlayer {
@@ -58,7 +49,9 @@ class TennisTournament {
             $next_round_players = $this->dispute_round($next_round_players);
         }
 
-        return $next_round_players[0];
+        $winner = $next_round_players[0];
+
+        return $winner;
     }
 
     public function can_dispute() {
@@ -87,5 +80,53 @@ class TennisTournament {
         $match = new TennisMatch($player_a, $player_b);
 
         return $match;
+    }
+
+    public function get_id() : string {
+        return $this->_id;
+    }
+
+    public function set_id(int $id) {
+        if ($this->_id != 0) {
+            return;
+        }
+
+        $this->_id = $id;
+    }
+
+    public function get_name() : string {
+        return $this->name;
+    }
+
+    public function get_players() : array {
+        return $this->players;
+    }
+
+    public function get_disputed() : bool {
+        return $this->disputed;
+    }
+
+    public function set_disputed(bool $disputed) : void {
+        $this->disputed = $disputed;
+    }
+
+    public function get_date() : string {
+        return $this->date;
+    }
+
+    public function set_date($date) : void {
+        $this->date = $date;
+    }
+
+    public function get_winner() : ?TennisPlayer {
+        return $this->winner;
+    }
+
+    public function set_winner($winner) : void {
+        $this->winner = $winner;
+    }
+
+    public function add_player(TennisPlayer $player) {
+        $this->players[] = $player;
     }
 }
