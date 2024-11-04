@@ -7,6 +7,22 @@ use Tennis\TennisPlayer as TennisTennisPlayer;
 
 class TennisPlayer {
     public static function add($player) {
+        $is_id_null = $player->id == null;
+        $is_rest_completed = true;
+        foreach ((array) $player as $key => $value) {
+            if ($key == "id") {
+                continue;
+            }
+
+            if (is_null($value)) {
+                $is_rest_completed = false;
+                break;
+            }
+        }
+        if($is_id_null && !$is_rest_completed) {
+            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+        }
+        
         $tennis_tennis_player = new TennisTennisPlayer(
             $player->name, 
             $player->level, 
