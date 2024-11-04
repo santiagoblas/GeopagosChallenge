@@ -3,7 +3,6 @@
 namespace Api;
 
 use Data\TennisTournament as DataTennisTournament;
-use stdClass;
 use Tennis\FemaleTennisTournament;
 use Tennis\MaleTennisTournament;
 use Tennis\TennisPlayer as TennisTennisPlayer;
@@ -28,10 +27,10 @@ class TennisTournament {
         $row = $data_tennis_tournament->save();
 
         if (is_null($row->id)) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
 
-        return "{\"status\": " . HTTP_OK . ", \"id\": \"" . $row->id . "\"}";
+        return "{\"status\": 200, \"id\": \"" . $row->id . "\"}";
     }
 
     public static function delete($tournament_id) {
@@ -40,10 +39,10 @@ class TennisTournament {
         $deleted = $data_tennis_tournament->delete($tournament_id);
 
         if (!$deleted) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
 
-        return "{\"status\": " . HTTP_OK . "}";
+        return "{\"status\": 200}";
     }
 
     public static function dispute($tournament_id) {
@@ -53,20 +52,20 @@ class TennisTournament {
 
         if ($tennis_tennis_tournament->get_disputed()) {
             $winner = $tennis_tennis_tournament->get_winner();
-            return "{\"status\": " . HTTP_OK . ", \"winner\": \"" . $winner->get_name() . "\", \"date\": \"" . $tennis_tennis_tournament->get_date() . "\", \"message\": \"This tournament was already disputed\"}"; 
+            return "{\"status\": 200, \"winner\": \"" . $winner->get_name() . "\", \"date\": \"" . $tennis_tennis_tournament->get_date() . "\", \"message\": \"This tournament was already disputed\"}"; 
         }
 
         $winner = $tennis_tennis_tournament->dispute();
 
         if (!$winner instanceof TennisTennisPlayer) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
 
         self::register_dispute($tennis_tennis_tournament, $data_tennis_tournament);
 
         TennisRegistration::register_winner($winner, $tennis_tennis_tournament);
 
-        return "{\"status\": " . HTTP_OK . ", \"winner\": \"" . $winner->get_name() . "\"}";
+        return "{\"status\": 200, \"winner\": \"" . $winner->get_name() . "\"}";
     }
 
     private static function register_dispute(TennisTennisTournament $tennis_tennis_tournament, DataTennisTournament $data_tennis_tournament) {
@@ -93,7 +92,7 @@ class TennisTournament {
             }
 
             if ($player_id == null) {
-                return "{\"status\": " . HTTP_BAD_REQUEST . ", \"message\": \"Players save failed\"}";
+                return "{\"status\": 400, \"message\": \"Players save failed\"}";
             }
 
             $player_ids[] = $player_id;
@@ -102,14 +101,14 @@ class TennisTournament {
         $result = TennisTournament::add($tournament);
         $result = json_decode($result);
         if ($result->status != 200) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . ", \"message\": \"Tournament save failed\", \"player_ids\": " . json_encode($player_ids) . "}";
+            return "{\"status\": 400, \"message\": \"Tournament save failed\", \"player_ids\": " . json_encode($player_ids) . "}";
         }
         $tournament_id = $result->id;
 
         $result = TennisRegistration::register_lot_by_ids($tournament_id, $player_ids);
         $result = json_decode($result);
         if ($result->status != 200) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . ", \"message\": \"Registrations save failed\"}";
+            return "{\"status\": 400, \"message\": \"Registrations save failed\"}";
         }
 
         return self::dispute($tournament_id);
@@ -125,7 +124,7 @@ class TennisTournament {
         }
 
         if (!$is_at_least_one_setted) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}, \"message\": \"No Filter applied\"}";
+            return "{\"status\": 400}, \"message\": \"No Filter applied\"}";
         }
 
         $data_tennis_tournament = new DataTennistournament();
@@ -136,6 +135,6 @@ class TennisTournament {
             return $tournament->get_id();
         }, $tournaments);
 
-        return "{\"status\": " . HTTP_OK . ", \"tournament_ids\": \"" . json_encode($tournaments) . "\"}";
+        return "{\"status\": 200, \"tournament_ids\": \"" . json_encode($tournaments) . "\"}";
     }
 }

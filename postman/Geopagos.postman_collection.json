@@ -1,0 +1,289 @@
+{
+	"info": {
+		"_postman_id": "96d5ef93-1039-40f0-8807-0b572fb9e194",
+		"name": "Geopagos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6319325"
+	},
+	"item": [
+		{
+			"name": "ADD PLAYER",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Lara",
+							"type": "text"
+						},
+						{
+							"key": "level",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "strength",
+							"value": "85",
+							"type": "text"
+						},
+						{
+							"key": "speed",
+							"value": "79",
+							"type": "text"
+						},
+						{
+							"key": "reaction_time",
+							"value": "0.1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/GeopagosChallenge/player/add",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"player",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE PLAYER",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost/GeopagosChallenge/player/delete/206",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"player",
+						"delete",
+						"206"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ADD TOURNAMENT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Torneo Ejemplo",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "M",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/GeopagosChallenge/tournament/add",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"tournament",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE TOURNAMENT",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost/GeopagosChallenge/tournament/delete/8",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"tournament",
+						"delete",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DISPUTE TOURNAMENT",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost/GeopagosChallenge/tournament/dispute/26",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"tournament",
+						"dispute",
+						"26"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REGISTER PLAYER IN TOURNAMENT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "201",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "Clelia",
+							"type": "text"
+						},
+						{
+							"key": "level",
+							"value": "23",
+							"type": "text"
+						},
+						{
+							"key": "strength",
+							"value": "23",
+							"type": "text"
+						},
+						{
+							"key": "speed",
+							"value": "23",
+							"type": "text"
+						},
+						{
+							"key": "reaction_time",
+							"value": "0.5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/GeopagosChallenge/tournament/register/25",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"tournament",
+						"register",
+						"25"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FAST TOURNAMENT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "players",
+							"value": "[\n    {\n        \"id\": 173\n    },\n    {\n        \"id\": 280\n    },\n    {\n        \"name\": \"Dario\",\n        \"level\": 23,\n        \"strength\": 23,\n        \"speed\": 23,\n        \"reaction_time\": 0.5\n    },\n    {\n        \"name\": \"Maria\",\n        \"level\": 100,\n        \"strength\": 23,\n        \"speed\": 23,\n        \"reaction_time\": 0.5\n    }\n]",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Torneo fast ejemplo",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "F",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/GeopagosChallenge/tournament/fast",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"tournament",
+						"fast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SEARCH",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost/GeopagosChallenge/tournament/search?min_date=2024-11-01 00:00:00&max_date=2024-11-05 00:00:00&disputed=1&gender=M",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GeopagosChallenge",
+						"tournament",
+						"search"
+					],
+					"query": [
+						{
+							"key": "min_date",
+							"value": "2024-11-01 00:00:00"
+						},
+						{
+							"key": "max_date",
+							"value": "2024-11-05 00:00:00"
+						},
+						{
+							"key": "disputed",
+							"value": "1"
+						},
+						{
+							"key": "gender",
+							"value": "M"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

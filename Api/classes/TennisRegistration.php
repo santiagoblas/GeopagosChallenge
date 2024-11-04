@@ -24,7 +24,7 @@ class TennisRegistration {
         }
 
         if ($player_id == null) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
 
         $model = new DataTennisRegistration();
@@ -34,17 +34,17 @@ class TennisRegistration {
         $row = $model->save();
 
         if (is_null($row->id)) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
 
-        return "{\"status\": " . HTTP_OK . ", \"id\": \"" . $row->id . "\"}";
+        return "{\"status\": 200, \"id\": \"" . $row->id . "\"}";
     }
 
     public static function register_lot_by_ids($tournament_id, $player_ids) {
         $registration_ids = [];
         foreach ($player_ids as $player_id) {
             if ($player_id == null) {
-                return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+                return "{\"status\": 400}";
             }
     
             $model = new DataTennisRegistration();
@@ -54,13 +54,13 @@ class TennisRegistration {
             $row = $model->save();
     
             if (is_null($row->id)) {
-                return "{\"status\": " . HTTP_BAD_REQUEST . ", \"message\": \"Registrations save failed\"}";
+                return "{\"status\": 400, \"message\": \"Registrations save failed\"}";
             }
 
             $registration_ids[] = $row->id;
         }
 
-        return "{\"status\": " . HTTP_OK . ", \"ids\": " . json_encode($registration_ids) . "}";
+        return "{\"status\": 200, \"ids\": " . json_encode($registration_ids) . "}";
     }
 
     private static function build_registration(int $player_id, int $tournament_id) : TennisTennisRegistration {

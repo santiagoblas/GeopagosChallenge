@@ -20,7 +20,7 @@ class TennisPlayer {
             }
         }
         if($is_id_null && !$is_rest_completed) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
         
         $tennis_tennis_player = new TennisTennisPlayer(
@@ -36,10 +36,10 @@ class TennisPlayer {
         $row = $data_tennis_player->save();
 
         if (is_null($row->id)) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
 
-        return "{\"status\": " . HTTP_OK . ", \"id\": \"" . $row->id . "\"}";
+        return "{\"status\": 200, \"id\": \"" . $row->id . "\"}";
     }
 
     public static function delete($player_id) {
@@ -48,9 +48,9 @@ class TennisPlayer {
         $deleted = $data_tennis_player->delete($player_id);
 
         if (!$deleted) {
-            return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+            return "{\"status\": 400}";
         }
 
-        return "{\"status\": " . HTTP_OK . "}";
+        return "{\"status\": 200}";
     }
 }

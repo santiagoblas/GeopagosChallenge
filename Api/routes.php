@@ -67,7 +67,7 @@ dispatch_post("/tournament/fast/", function() {
     $players = [];
 
     if(!isset($_POST["players"]) || !isset($_POST["name"]) || !isset($_POST["gender"])) {
-        return "{\"status\": " . HTTP_BAD_REQUEST . "}";
+        return "{\"status\": 400}";
     }
 
     $players = [];

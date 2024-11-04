@@ -4,7 +4,6 @@ namespace Data;
 
 use LessQL\Database;
 use LessQL\Row;
-use PhpParser\Node\Expr\Cast\Object_;
 use stdClass;
 
 class Model {

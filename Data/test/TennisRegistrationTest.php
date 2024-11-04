@@ -5,6 +5,7 @@ namespace Data;
 use Data\TennisTournament;
 use PHPUnit\Framework\TestCase;
 use Tennis\TennisPlayer as TennisTennisPlayer;
+use Tennis\TennisRegistration as TennisTennisRegistration;
 use Tennis\TennisTournament as TennisTennisTournament;
 
 class TennisRegistrationTest extends TestCase {
@@ -60,8 +61,13 @@ class TennisRegistrationTest extends TestCase {
 
         $all_saved = true;
         foreach ($player_ids as $player_id) {
-            $model->tournament_id = $tournament_id;
-            $model->player_id = $player_id;
+            $data_tennis_player = new TennisPlayer();
+            $tennis_tennis_player = $data_tennis_player->find($player_id);
+
+            $data_tennis_tournament = new TennisTournament();
+            $tennis_tennis_tournament = $data_tennis_tournament->find($tournament_id);
+
+            $model->registration = new TennisTennisRegistration($tennis_tennis_player, $tennis_tennis_tournament); 
 
             $tennis_registration = $model->save();
 
