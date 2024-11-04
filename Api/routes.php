@@ -9,10 +9,6 @@ function hello()
     return 'Hello world!';
 }
 
-dispatch('/', 'Api\\hello');
-
-dispatch("/Api/player", "Api\\hello");
-
 dispatch_post("/player/add", function () {
     $player = new stdClass();
 
@@ -93,4 +89,18 @@ dispatch_post("/tournament/fast/", function() {
     $tournament->gender = $_POST["gender"];
 
     return TennisTournament::fast_tournament($players, $tournament);
+});
+
+dispatch_get("/tournament/search/", function() {
+    $min_date = isset($_GET["min_date"]) ? $_GET["min_date"] : null;
+    $max_date = isset($_GET["max_date"]) ? $_GET["max_date"] : null;
+    $gender = isset($_GET["gender"]) ? $_GET["gender"] : null;
+    $disputed = isset($_GET["disputed"]) ? $_GET["disputed"] : null;
+
+    return TennisTournament::search_tournament([
+        "min_date" => $min_date,
+        "max_date" => $max_date,
+        "gender" => $gender,
+        "disputed" => $disputed,
+    ]);
 });

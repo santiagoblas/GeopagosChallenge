@@ -3,9 +3,11 @@
 namespace Api;
 
 use Data\TennisTournament as DataTennisTournament;
+use stdClass;
 use Tennis\FemaleTennisTournament;
 use Tennis\MaleTennisTournament;
 use Tennis\TennisPlayer as TennisTennisPlayer;
+use Tennis\TennisTournament as TennisTennisTournament;
 
 class TennisTournament {
     public static function add($tournament) {
@@ -47,15 +49,32 @@ class TennisTournament {
     public static function dispute($tournament_id) {
         $data_tennis_tournament = new DataTennistournament();
 
-        $tennis_tournament = $data_tennis_tournament->find($tournament_id);
+        $tennis_tennis_tournament = $data_tennis_tournament->find($tournament_id);
 
-        $winner = $tennis_tournament->dispute();
+        if ($tennis_tennis_tournament->get_disputed()) {
+            $winner = $tennis_tennis_tournament->get_winner();
+            return "{\"status\": " . HTTP_OK . ", \"winner\": \"" . $winner->get_name() . "\", \"date\": \"" . $tennis_tennis_tournament->get_date() . "\", \"message\": \"This tournament was already disputed\"}"; 
+        }
+
+        $winner = $tennis_tennis_tournament->dispute();
 
         if (!$winner instanceof TennisTennisPlayer) {
             return "{\"status\": " . HTTP_BAD_REQUEST . "}";
         }
 
+        self::register_dispute($tennis_tennis_tournament, $data_tennis_tournament);
+
+        TennisRegistration::register_winner($winner, $tennis_tennis_tournament);
+
         return "{\"status\": " . HTTP_OK . ", \"winner\": \"" . $winner->get_name() . "\"}";
+    }
+
+    private static function register_dispute(TennisTennisTournament $tennis_tennis_tournament, DataTennisTournament $data_tennis_tournament) {
+        $tennis_tennis_tournament->set_date(date("Y-m-d 00:00:00"));
+        $tennis_tennis_tournament->set_disputed(true);
+
+        $data_tennis_tournament->set_tournament($tennis_tennis_tournament);
+        $data_tennis_tournament->update();
     }
 
     public static function fast_tournament($players, $tournament) {
@@ -94,5 +113,29 @@ class TennisTournament {
         }
 
         return self::dispute($tournament_id);
+    }
+
+    public static function search_tournament($params) {
+        $is_at_least_one_setted = false;
+        foreach ($params as $param) {
+            if (!is_null($param)) {
+                $is_at_least_one_setted = true;
+                break;
+            }
+        }
+
+        if (!$is_at_least_one_setted) {
+            return "{\"status\": " . HTTP_BAD_REQUEST . "}, \"message\": \"No Filter applied\"}";
+        }
+
+        $data_tennis_tournament = new DataTennistournament();
+
+        $tournaments = $data_tennis_tournament->search($params);
+
+        $tournaments = array_map(function($tournament) {
+            return $tournament->get_id();
+        }, $tournaments);
+
+        return "{\"status\": " . HTTP_OK . ", \"tournament_ids\": \"" . json_encode($tournaments) . "\"}";
     }
 }
